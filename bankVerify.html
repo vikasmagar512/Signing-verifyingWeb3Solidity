@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script type="text/javascript" src="./node_modules/bignumber.js/bignumber.min.js"></script>
+    <script type="text/javascript" src="./dist/web3.js"></script>
+	
+    <script type="text/javascript">
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+        console.log(web3); // {eth: .., shh: ...} // it's her
+        
+        web3.eth.defaultAccount = web3.eth.accounts[2];
+        
+        function watchBalance() {
+            var coinbase = web3.eth.coinbase;
+            console.log(coinbase)
+            var originalBalance = web3.eth.getBalance(coinbase).toNumber();
+            document.getElementById('coinbase').innerText = 'coinbase: ' + coinbase;
+            document.getElementById('original').innerText = ' original balance: ' + originalBalance + '    watching...';
+
+            web3.eth.filter('latest').watch(function() {
+                var currentBalance = web3.eth.getBalance(coinbase).toNumber();
+                document.getElementById("current").innerText = 'current: ' + currentBalance;
+                document.getElementById("diff").innerText = 'diff:    ' + (currentBalance - originalBalance);
+            });
+        }
+         
+              
+        var CoursetroContract = web3.eth.contract([
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_addr",
+				"type": "address"
+			},
+			{
+				"name": "msgHash",
+				"type": "bytes32"
+			},
+			{
+				"name": "v",
+				"type": "uint8"
+			},
+			{
+				"name": "r",
+				"type": "bytes32"
+			},
+			{
+				"name": "s",
+				"type": "bytes32"
+			}
+		],
+		"name": "isSigned",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "bankID",
+				"type": "string"
+			},
+			{
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"name": "custAddress",
+				"type": "address"
+			},
+			{
+				"name": "sig",
+				"type": "string"
+			}
+		],
+		"name": "storeCust",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "bankID",
+				"type": "string"
+			},
+			{
+				"name": "sig",
+				"type": "string"
+			}
+		],
+		"name": "storeSig",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "bankID",
+				"type": "string"
+			}
+		],
+		"name": "getCustInfo",
+		"outputs": [
+			{
+				"name": "ad",
+				"type": "address"
+			},
+			{
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"name": "sig",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "bankID",
+				"type": "string"
+			}
+		],
+		"name": "getSig",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "msgHash",
+				"type": "bytes32"
+			},
+			{
+				"name": "v",
+				"type": "uint8"
+			},
+			{
+				"name": "r",
+				"type": "bytes32"
+			},
+			{
+				"name": "s",
+				"type": "bytes32"
+			}
+		],
+		"name": "recoverAddr",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_message",
+				"type": "bytes32"
+			},
+			{
+				"name": "_v",
+				"type": "uint8"
+			},
+			{
+				"name": "_r",
+				"type": "bytes32"
+			},
+			{
+				"name": "_s",
+				"type": "bytes32"
+			}
+		],
+		"name": "verify",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_message",
+				"type": "bytes32"
+			},
+			{
+				"name": "signerAddress",
+				"type": "address"
+			},
+			{
+				"name": "_v",
+				"type": "uint8"
+			},
+			{
+				"name": "_r",
+				"type": "bytes32"
+			},
+			{
+				"name": "_s",
+				"type": "bytes32"
+			}
+		],
+		"name": "verifyAddress",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]);
+
+        var Coursetro = CoursetroContract.at('0x161b2efe4a840bb0821e2f09c54ec2adccdcf710');
+        console.log(Coursetro); 
+				
+		//working Testrpc
+		var bankID = "2"
+		// var msg1 = web3.sha3("sagar") 
+		// var sig = web3.eth.sign(web3.eth.accounts[0], msg1)
+		// var r1 = sig.substr(0,66)
+		// var s1 = "0x" + sig.substr(66,64)
+		// var v1 = 28 
+        // console.log('web3.eth.accounts ',web3.eth.accounts)
+        // // console.log(v1,r1,s1)
+		// Coursetro.verify(msg1,v1,r1,s1, function(err,res){         
+		// 	console.log(err,res)
+		// }) 	
+		//working Testrpc
+		// var bankID = "2"
+		console.log('web3.eth.accounts[0] ',web3.eth.accounts[0])
+		var msg1 = web3.sha3("magar") 
+		var sig = web3.eth.sign(web3.eth.accounts[0], msg1)
+		var r1 = sig.substr(0,66)
+		var s1 = "0x" + sig.substr(66,64)
+		var v1 = 28 
+			console.log(v1,r1,s1)
+		Coursetro.verify(msg1,v1,r1,s1, function(err,res){         
+			console.log(err,res)
+		}) 	
+		
+		// var msg1 = "hello1"
+		// var sig ="0x96f34bdf036ffc4714b7839585863e134c30ba5ff3533484edc741193a2f9c701024babceab6c2c360aac27163aeabc1bdecdf90c5d5488e8fb12a55b708379701"
+		// var r1 = sig.substr(0,66)
+		// var s1 = "0x" + sig.substr(66,64)
+		// var v1 = 28 
+		// 	console.log(v1,r1,s1)
+		// Coursetro.verify(msg1,v1,r1,s1, function(err,res){         
+		// 	console.log(err,res)
+		// }) 	
+
+		var retrievedSig;
+		var signerAddress;
+		var s2,v2,r2;
+        var name;
+        // setTimeout(function(){
+		// 	Coursetro.getCustInfo(bankID, function(err,res){         
+		// 		console.log(err,res)
+		// 		console.log(JSON.stringify(res));
+        //         signerAddress = res[0]
+        //         name = res[1]
+		// 		retrievedSig = res[2]
+		// 		r2 = retrievedSig.substr(0,66)
+		// 		s2 = "0x" + retrievedSig.substr(66,64)
+		// 		v2 = 28 
+        //         console.log(name,signerAddress)
+		// 	    console.log(v2,r2,s2)
+		// 	}) 	
+		// },2000)
+		
+        // setTimeout(function(){
+		// 	console.log(name,signerAddress)
+		// 	console.log(v2,r2,s2)
+		// 	Coursetro.verifyAddress(web3.sha3(name),signerAddress,v2,r2,s2, function(err,res){         
+		// 		console.log(err,res)
+		// 	}) 	
+		// },5000)
+		function getCustInfo(){
+			bankID = document.getElementById("bankID").value
+            console.log('bankID is ',bankID)
+			Coursetro.getCustInfo(bankID, function(err,res){         
+				console.log(err,res)
+				console.log(JSON.stringify(res));
+                signerAddress = res[0]
+                name = res[1]
+				retrievedSig = res[2]
+				r2 = retrievedSig.substr(0,66)
+				s2 = "0x" + retrievedSig.substr(66,64)
+				v2 = 28 
+                console.log(name,signerAddress)
+			    console.log(v2,r2,s2)
+			}) 	
+        }
+		function verifySig(){
+            console.log(name,signerAddress)
+			console.log(v2,r2,s2)
+			Coursetro.verifyAddress(web3.sha3(name),signerAddress,v2,r2,s2, function(err,res){         
+				console.log(err,res)
+				document.getElementById("result").html=res
+			})
+        }
+    </script>
+</head>
+<body>
+    <h1>Enter Customer bankID</h1>
+	<label for="bankID" class="col-lg-2 control-label"> bankID</label>
+	<input id="bankID" type="text">
+    <button type="button" onClick="getCustInfo();">watch balance</button>
+    
+	<div class="container">
+		<h1>Customer</h1>
+        <label for="name" class="col-lg-2 control-label">Customer Name</label>		
+		<p id='name'></p>
+        <label for="name" class="col-lg-2 control-label">Customer Signature</label>		
+		<p id='sig'></p>
+        <button id="button" onClick="verifySig();">Verify Signature</button>
+    </div>
+	<h1>Result</h1>
+    <p id='result'></p>
+        
+    <h1>coinbase balance</h1>
+    <button type="button" onClick="watchBalance();">watch balance</button>
+    <div></div>
+    <div id="coinbase"></div>
+    <div id="original"></div>
+    <div id="current"></div>
+    <div id="diff"></div>
+</body>
+</html>

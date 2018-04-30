@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script type="text/javascript" src="./node_modules/bignumber.js/bignumber.min.js"></script>
+    <script type="text/javascript" src="./dist/web3.js"></script>
+	<script type="text/javascript">
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+        console.log(web3); // {eth: .., shh: ...} // it's her
+        
+        web3.eth.defaultAccount = web3.eth.accounts[2];
+        
+        function watchBalance() {
+            var coinbase = web3.eth.coinbase;
+            console.log(coinbase)
+            var originalBalance = web3.eth.getBalance(coinbase).toNumber();
+            document.getElementById('coinbase').innerText = 'coinbase: ' + coinbase;
+            document.getElementById('original').innerText = ' original balance: ' + originalBalance + '    watching...';
+
+            web3.eth.filter('latest').watch(function() {
+                var currentBalance = web3.eth.getBalance(coinbase).toNumber();
+                document.getElementById("current").innerText = 'current: ' + currentBalance;
+                document.getElementById("diff").innerText = 'diff:    ' + (currentBalance - originalBalance);
+            });
+        }
+       
+        
+        var CoursetroContract = web3.eth.contract([
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_addr",
+				"type": "address"
+			},
+			{
+				"name": "msgHash",
+				"type": "bytes32"
+			},
+			{
+				"name": "v",
+				"type": "uint8"
+			},
+			{
+				"name": "r",
+				"type": "bytes32"
+			},
+			{
+				"name": "s",
+				"type": "bytes32"
+			}
+		],
+		"name": "isSigned",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "bankID",
+				"type": "string"
+			},
+			{
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"name": "custAddress",
+				"type": "address"
+			},
+			{
+				"name": "sig",
+				"type": "string"
+			}
+		],
+		"name": "storeCust",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "bankID",
+				"type": "string"
+			},
+			{
+				"name": "sig",
+				"type": "string"
+			}
+		],
+		"name": "storeSig",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "bankID",
+				"type": "string"
+			}
+		],
+		"name": "getCustInfo",
+		"outputs": [
+			{
+				"name": "ad",
+				"type": "address"
+			},
+			{
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"name": "sig",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "bankID",
+				"type": "string"
+			}
+		],
+		"name": "getSig",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "msgHash",
+				"type": "bytes32"
+			},
+			{
+				"name": "v",
+				"type": "uint8"
+			},
+			{
+				"name": "r",
+				"type": "bytes32"
+			},
+			{
+				"name": "s",
+				"type": "bytes32"
+			}
+		],
+		"name": "recoverAddr",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_message",
+				"type": "bytes32"
+			},
+			{
+				"name": "_v",
+				"type": "uint8"
+			},
+			{
+				"name": "_r",
+				"type": "bytes32"
+			},
+			{
+				"name": "_s",
+				"type": "bytes32"
+			}
+		],
+		"name": "verify",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_message",
+				"type": "bytes32"
+			},
+			{
+				"name": "signerAddress",
+				"type": "address"
+			},
+			{
+				"name": "_v",
+				"type": "uint8"
+			},
+			{
+				"name": "_r",
+				"type": "bytes32"
+			},
+			{
+				"name": "_s",
+				"type": "bytes32"
+			}
+		],
+		"name": "verifyAddress",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]);
+
+        var Coursetro = CoursetroContract.at('0x161b2efe4a840bb0821e2f09c54ec2adccdcf710');
+        console.log(Coursetro); 
+				
+		var bankID = "2"
+		var name = web3.sha3("hello") 
+        console.log('address is ',web3.eth.accounts[0])
+		var sig = web3.eth.sign(web3.eth.accounts[0],name)
+        console.log('sig is ',sig)
+		
+        // var custAddress = "0x0f9e4e74eb602bf1606d4e5bf65bc2324c9882c1";
+        function sendData(){
+            let name1 = document.getElementById("name").value
+            console.log('name1 is ',name1)
+            let sig1=""
+			console.log('name1 is ',sig1)
+            sig1 = web3.eth.sign(web3.eth.accounts[0],web3.sha3(name1))
+            console.log('sig1 is ',sig1)
+            var custAddress = web3.eth.accounts[0];
+            Coursetro.storeCust(bankID,name1,custAddress,sig1, function(err,res){         
+				console.log(err,res)
+			})
+        }
+		// setTimeout(function(){
+		// 	Coursetro.storeCust(bankID,name,custAddress,sig, function(err,res){         
+		// 		console.log(err,res)
+		// 	}) 	            
+		// },1000)
+    </script>
+</head>
+<body>
+    
+        <div class="container">
+            <h1>Coursetro Instructor</h1>
+            <label for="name" class="col-lg-2 control-label"> Name</label>
+            <input id="name" type="text">
+            <!-- 
+            <label for="name" class="col-lg-2 control-label">Instructor Age</label>
+            <input id="age" type="text"> -->
+            <button id="button" onClick="sendData();">Update Instructor</button>
+        </div>
+<!--         
+    <div class="container">
+        <h1>Coursetro Instructor</h1>
+        <label for="name" class="col-lg-2 control-label">Instructor Name</label>
+        <input id="name" type="text">
+        <label for="name" class="col-lg-2 control-label">Instructor Age</label>
+        <input id="age" type="text">
+        <button id="button" onClick="setInstructor();">Update Instructor</button>
+    </div> -->
+    
+    <h1>coinbase balance</h1>
+    <button type="button" onClick="watchBalance();">watch balance</button>
+    <div></div>
+    <div id="coinbase"></div>
+    <div id="original"></div>
+    <div id="current"></div>
+    <div id="diff"></div>
+</body>
+</html>
