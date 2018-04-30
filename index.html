@@ -260,58 +260,10 @@
 ]);
 
         var Coursetro = CoursetroContract.at('0xb44f1188c0bd95a7e30847e0158d1b15803baf3c');
-        console.log(Coursetro); 
-				
-		function toHex(str) {
-			var hex = '';
-			for(var i=0;i<str.length;i++) {
-				hex += ''+str.charCodeAt(i).toString(16);
-			}
-			return hex;
-		}
-
-		const addr = web3.eth.accounts[0]
-		const msg = 'school bus'
-		const hex_msg = '0x' + toHex(msg)
-		let signature = web3.eth.sign(addr, hex_msg)
-
-		console.log(`address -----> ${addr}`)
-		console.log(`msg ---------> ${msg}`)
-		console.log(`hex(msg) ----> ${hex_msg}`)
-		console.log(`sig ---------> ${signature}`)
-
-		signature = signature.substr(2);
-		const r = '0x' + signature.slice(0, 64)
-		const s = '0x' + signature.slice(64, 128)
-		const v = '0x' + signature.slice(128, 130)
-		const v_decimal = web3.toDecimal(v)
-
-		console.log(`r -----------> ${r}`)
-		console.log(`s -----------> ${s}`)
-		console.log(`v -----------> ${v}`)
-		console.log(`vd ----------> ${v_decimal}`)
-
-        // Coursetro.verify(r, s, v, h, function(err,res){
-		// 	console.log(err,res)
-		// });
-		const fixed_msg = `\x19Ethereum Signed Message:\n${msg.length}${msg}`
-		const fixed_msg_sha = web3.sha3(fixed_msg)
-        console.log('here addrr is ',addr)
-        console.log('here fixed_msg_sha is ',fixed_msg_sha)
-        console.log('here v_decimal is ',v_decimal)
-        console.log('here r is ',r)
-        console.log('here s is ',s)
-		
-		// Coursetro.recoverAddr(fixed_msg_sha,v_decimal,r,s, function(err,res){         
-		// 	console.log(err,res)
-		// });
-		// Coursetro.recoverAddr("0x637027ead3e166d3b96679f11241cd71b8917780c5d669b44659d364950002e7",27,"0x41713d65e60a8a3e3edce48337bffaf61b5379a7f0ec1c607e747f83ade7acd5","0x5b4b7465a74e69822c8022de35efb17330f82e78ede744ca9b89a44bd26c8672", function(err,res){         
-		// 	console.log(err,res)
-		// });
-
+        console.log(Coursetro);
 
 		//working Testrpc
-		var bankID = "1"
+		var bankID = "2"
 		var msg1 = web3.sha3("hello") 
 		var sig = web3.eth.sign(web3.eth.accounts[0], msg1)
 		var r1 = sig.substr(0,66)
@@ -320,36 +272,7 @@
 
 		Coursetro.verify(msg1,v1,r1,s1, function(err,res){         
 			console.log(err,res)
-		}) 	
-		
-		var retrievedSig=""
-		var signerAddress = "0xffed7f30fc8eba003d8dfe6caf60ea131febecc6"
-		var s2,v2,r2;
-		console.log('sig is ',sig)
-		// setTimeout(function(){
-		// 	Coursetro.storeSig(bankID,sig, function(err,res){         
-		// 		console.log(err,res)
-		// 	}) 	
-		// },1000)
-		setTimeout(function(){
-			Coursetro.getSig(bankID, function(err,res){         
-				console.log(err,res)
-				console.log(JSON.stringify(res));
-				retrievedSig = res
-				r2 = retrievedSig.substr(0,66)
-				s2 = "0x" + retrievedSig.substr(66,64)
-				v2 = 28 
-
-			}) 	
-		},2000)
-		setTimeout(function(){
-			console.log(msg1,signerAddress)
-			console.log(v2,r2,s2)
-			Coursetro.verifyAddress(msg1,signerAddress,v2,r2,s2, function(err,res){         
-				console.log(err,res)
-			}) 	
-		},5000)
-		
+		})
 		// personal.unlockAccount("0x8bafbf78c0ea3ec049a69a55caba0f8c8991b814", "*Vandanamagar9850",1500000)
     </script>
 </head>

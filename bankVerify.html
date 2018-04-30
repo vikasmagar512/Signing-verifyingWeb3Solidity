@@ -22,231 +22,128 @@
         web3.eth.defaultAccount = web3.eth.accounts[0];
 
         var CoursetroContract = web3.eth.contract([
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_addr",
-				"type": "address"
-			},
-			{
-				"name": "msgHash",
-				"type": "bytes32"
-			},
-			{
-				"name": "v",
-				"type": "uint8"
-			},
-			{
-				"name": "r",
-				"type": "bytes32"
-			},
-			{
-				"name": "s",
-				"type": "bytes32"
-			}
-		],
-		"name": "isSigned",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "bankID",
-				"type": "string"
-			},
-			{
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"name": "custAddress",
-				"type": "address"
-			},
-			{
-				"name": "sig",
-				"type": "string"
-			}
-		],
-		"name": "storeCust",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "bankID",
-				"type": "string"
-			},
-			{
-				"name": "sig",
-				"type": "string"
-			}
-		],
-		"name": "storeSig",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "bankID",
-				"type": "string"
-			}
-		],
-		"name": "getCustInfo",
-		"outputs": [
-			{
-				"name": "ad",
-				"type": "address"
-			},
-			{
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"name": "sig",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "bankID",
-				"type": "string"
-			}
-		],
-		"name": "getSig",
-		"outputs": [
-			{
-				"name": "",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "msgHash",
-				"type": "bytes32"
-			},
-			{
-				"name": "v",
-				"type": "uint8"
-			},
-			{
-				"name": "r",
-				"type": "bytes32"
-			},
-			{
-				"name": "s",
-				"type": "bytes32"
-			}
-		],
-		"name": "recoverAddr",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_message",
-				"type": "bytes32"
-			},
-			{
-				"name": "_v",
-				"type": "uint8"
-			},
-			{
-				"name": "_r",
-				"type": "bytes32"
-			},
-			{
-				"name": "_s",
-				"type": "bytes32"
-			}
-		],
-		"name": "verify",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_message",
-				"type": "bytes32"
-			},
-			{
-				"name": "signerAddress",
-				"type": "address"
-			},
-			{
-				"name": "_v",
-				"type": "uint8"
-			},
-			{
-				"name": "_r",
-				"type": "bytes32"
-			},
-			{
-				"name": "_s",
-				"type": "bytes32"
-			}
-		],
-		"name": "verifyAddress",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	}
-]);
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "bankID",
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "custAddress",
+                        "type": "address"
+                    },
+                    {
+                        "name": "sig",
+                        "type": "string"
+                    }
+                ],
+                "name": "storeCust",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "bankID",
+                        "type": "string"
+                    }
+                ],
+                "name": "getCustInfo",
+                "outputs": [
+                    {
+                        "name": "ad",
+                        "type": "address"
+                    },
+                    {
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "sig",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_message",
+                        "type": "bytes32"
+                    },
+                    {
+                        "name": "_v",
+                        "type": "uint8"
+                    },
+                    {
+                        "name": "_r",
+                        "type": "bytes32"
+                    },
+                    {
+                        "name": "_s",
+                        "type": "bytes32"
+                    }
+                ],
+                "name": "verify",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_message",
+                        "type": "bytes32"
+                    },
+                    {
+                        "name": "signerAddress",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_v",
+                        "type": "uint8"
+                    },
+                    {
+                        "name": "_r",
+                        "type": "bytes32"
+                    },
+                    {
+                        "name": "_s",
+                        "type": "bytes32"
+                    }
+                ],
+                "name": "verifyAddress",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ]);
 
-        var Coursetro = CoursetroContract.at('0x8ff39f03957a404591701267326678b03505ddb3');
+        var Coursetro = CoursetroContract.at('0x05c33ccfff12d32e888f7914e0e79faa4397c058');
         console.log(Coursetro); 
 				
 		//working Testrpc
@@ -255,7 +152,7 @@
 		// var r1 = sig.substr(0,66)
 		// var s1 = "0x" + sig.substr(66,64)
 		// var v1 = 28
-        // console.log('web3.eth.accounts ',web3.eth.accounts)
+        // console.log('web3.eth.accounts[0] ',web3.eth.accounts[0])
         // // console.log(v1,r1,s1)
 		// Coursetro.verify(msg1,v1,r1,s1, function(err,res){
 		// 	console.log(err,res)
@@ -354,13 +251,5 @@
         <h1>Result</h1>
         <p id='result'></p>
     </div>
-
-    <h1>coinbase balance</h1>
-    <button type="button" onClick="watchBalance();">watch balance</button>
-    <div></div>
-    <div id="coinbase"></div>
-    <div id="original"></div>
-    <div id="current"></div>
-    <div id="diff"></div>
 </body>
 </html>

@@ -20,234 +20,134 @@
         web3.eth.defaultAccount = web3.eth.accounts[0];
 
         var CoursetroContract = web3.eth.contract([
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_addr",
-				"type": "address"
-			},
-			{
-				"name": "msgHash",
-				"type": "bytes32"
-			},
-			{
-				"name": "v",
-				"type": "uint8"
-			},
-			{
-				"name": "r",
-				"type": "bytes32"
-			},
-			{
-				"name": "s",
-				"type": "bytes32"
-			}
-		],
-		"name": "isSigned",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "bankID",
-				"type": "string"
-			},
-			{
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"name": "custAddress",
-				"type": "address"
-			},
-			{
-				"name": "sig",
-				"type": "string"
-			}
-		],
-		"name": "storeCust",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "bankID",
-				"type": "string"
-			},
-			{
-				"name": "sig",
-				"type": "string"
-			}
-		],
-		"name": "storeSig",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "bankID",
-				"type": "string"
-			}
-		],
-		"name": "getCustInfo",
-		"outputs": [
-			{
-				"name": "ad",
-				"type": "address"
-			},
-			{
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"name": "sig",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "bankID",
-				"type": "string"
-			}
-		],
-		"name": "getSig",
-		"outputs": [
-			{
-				"name": "",
-				"type": "string"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "msgHash",
-				"type": "bytes32"
-			},
-			{
-				"name": "v",
-				"type": "uint8"
-			},
-			{
-				"name": "r",
-				"type": "bytes32"
-			},
-			{
-				"name": "s",
-				"type": "bytes32"
-			}
-		],
-		"name": "recoverAddr",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_message",
-				"type": "bytes32"
-			},
-			{
-				"name": "_v",
-				"type": "uint8"
-			},
-			{
-				"name": "_r",
-				"type": "bytes32"
-			},
-			{
-				"name": "_s",
-				"type": "bytes32"
-			}
-		],
-		"name": "verify",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "_message",
-				"type": "bytes32"
-			},
-			{
-				"name": "signerAddress",
-				"type": "address"
-			},
-			{
-				"name": "_v",
-				"type": "uint8"
-			},
-			{
-				"name": "_r",
-				"type": "bytes32"
-			},
-			{
-				"name": "_s",
-				"type": "bytes32"
-			}
-		],
-		"name": "verifyAddress",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	}
-]);
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "bankID",
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "custAddress",
+                        "type": "address"
+                    },
+                    {
+                        "name": "sig",
+                        "type": "string"
+                    }
+                ],
+                "name": "storeCust",
+                "outputs": [],
+                "payable": false,
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "bankID",
+                        "type": "string"
+                    }
+                ],
+                "name": "getCustInfo",
+                "outputs": [
+                    {
+                        "name": "ad",
+                        "type": "address"
+                    },
+                    {
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "sig",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_message",
+                        "type": "bytes32"
+                    },
+                    {
+                        "name": "_v",
+                        "type": "uint8"
+                    },
+                    {
+                        "name": "_r",
+                        "type": "bytes32"
+                    },
+                    {
+                        "name": "_s",
+                        "type": "bytes32"
+                    }
+                ],
+                "name": "verify",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_message",
+                        "type": "bytes32"
+                    },
+                    {
+                        "name": "signerAddress",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_v",
+                        "type": "uint8"
+                    },
+                    {
+                        "name": "_r",
+                        "type": "bytes32"
+                    },
+                    {
+                        "name": "_s",
+                        "type": "bytes32"
+                    }
+                ],
+                "name": "verifyAddress",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ]);
 
-        var Coursetro = CoursetroContract.at('0x8ff39f03957a404591701267326678b03505ddb3');
-        console.log(Coursetro); 
-				
+        var Coursetro = CoursetroContract.at('0x05c33ccfff12d32e888f7914e0e79faa4397c058');
 		var bankID = "2" // Just for example
+        console.log(Coursetro);
+        $(document).ready(function () {
+            document.getElementById("BankID").innerHTML = bankID
+            $("#BankID").html(bankID)
+        })
         /*
                 var name = web3.sha3("hello")
                 var sig = web3.eth.sign(web3.eth.accounts[0],name)
@@ -273,12 +173,12 @@
 <body>
     
     <div class="container">
-        <label for="BankID" class="col-lg-2 control-label">Account Number</label>
+        <label for="BankID" class="col-lg-2 control-label">Account Number : </label>
         <p id='BankID'></p>
         <h1>Customer Info</h1>
         <label for="name" class="col-lg-2 control-label"> Name</label>
-        <input id="name" type="text">
-        <button id="button" onClick="sendData();">Update Instructor</button>
+        <input id="name" type="text" placeholder="enter your name">
+        <button id="button" onClick="sendData();">Save Info</button>
     </div>
 </body>
 </html>
