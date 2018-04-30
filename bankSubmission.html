@@ -13,28 +13,12 @@
         if (typeof web3 !== 'undefined') {
             web3 = new Web3(web3.currentProvider);
         } else {
-            // set the provider you want from Web3.providers
             web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
         }
         console.log(web3); // {eth: .., shh: ...} // it's her
         
-        web3.eth.defaultAccount = web3.eth.accounts[2];
-        
-        function watchBalance() {
-            var coinbase = web3.eth.coinbase;
-            console.log(coinbase)
-            var originalBalance = web3.eth.getBalance(coinbase).toNumber();
-            document.getElementById('coinbase').innerText = 'coinbase: ' + coinbase;
-            document.getElementById('original').innerText = ' original balance: ' + originalBalance + '    watching...';
+        web3.eth.defaultAccount = web3.eth.accounts[0];
 
-            web3.eth.filter('latest').watch(function() {
-                var currentBalance = web3.eth.getBalance(coinbase).toNumber();
-                document.getElementById("current").innerText = 'current: ' + currentBalance;
-                document.getElementById("diff").innerText = 'diff:    ' + (currentBalance - originalBalance);
-            });
-        }
-       
-        
         var CoursetroContract = web3.eth.contract([
 	{
 		"constant": false,
@@ -260,62 +244,41 @@
 	}
 ]);
 
-        var Coursetro = CoursetroContract.at('0x161b2efe4a840bb0821e2f09c54ec2adccdcf710');
+        var Coursetro = CoursetroContract.at('0x8ff39f03957a404591701267326678b03505ddb3');
         console.log(Coursetro); 
 				
-		var bankID = "2"
-		var name = web3.sha3("hello") 
-        console.log('address is ',web3.eth.accounts[0])
-		var sig = web3.eth.sign(web3.eth.accounts[0],name)
-        console.log('sig is ',sig)
-		
-        // var custAddress = "0x0f9e4e74eb602bf1606d4e5bf65bc2324c9882c1";
+		var bankID = "2" // Just for example
+        /*
+                var name = web3.sha3("hello")
+                var sig = web3.eth.sign(web3.eth.accounts[0],name)
+        */
+
         function sendData(){
             let name1 = document.getElementById("name").value
             console.log('name1 is ',name1)
-            let sig1=""
-			console.log('name1 is ',sig1)
-            sig1 = web3.eth.sign(web3.eth.accounts[0],web3.sha3(name1))
+            let sig1 = web3.eth.sign(web3.eth.accounts[0],web3.sha3(name1))
             console.log('sig1 is ',sig1)
             var custAddress = web3.eth.accounts[0];
             Coursetro.storeCust(bankID,name1,custAddress,sig1, function(err,res){         
 				console.log(err,res)
+                if(err){
+				    alert('Error. Please try again later')
+                }else{
+				    alert('Info Submitted.')
+                }
 			})
         }
-		// setTimeout(function(){
-		// 	Coursetro.storeCust(bankID,name,custAddress,sig, function(err,res){         
-		// 		console.log(err,res)
-		// 	}) 	            
-		// },1000)
     </script>
 </head>
 <body>
     
-        <div class="container">
-            <h1>Coursetro Instructor</h1>
-            <label for="name" class="col-lg-2 control-label"> Name</label>
-            <input id="name" type="text">
-            <!-- 
-            <label for="name" class="col-lg-2 control-label">Instructor Age</label>
-            <input id="age" type="text"> -->
-            <button id="button" onClick="sendData();">Update Instructor</button>
-        </div>
-<!--         
     <div class="container">
-        <h1>Coursetro Instructor</h1>
-        <label for="name" class="col-lg-2 control-label">Instructor Name</label>
+        <label for="BankID" class="col-lg-2 control-label">Account Number</label>
+        <p id='BankID'></p>
+        <h1>Customer Info</h1>
+        <label for="name" class="col-lg-2 control-label"> Name</label>
         <input id="name" type="text">
-        <label for="name" class="col-lg-2 control-label">Instructor Age</label>
-        <input id="age" type="text">
-        <button id="button" onClick="setInstructor();">Update Instructor</button>
-    </div> -->
-    
-    <h1>coinbase balance</h1>
-    <button type="button" onClick="watchBalance();">watch balance</button>
-    <div></div>
-    <div id="coinbase"></div>
-    <div id="original"></div>
-    <div id="current"></div>
-    <div id="diff"></div>
+        <button id="button" onClick="sendData();">Update Instructor</button>
+    </div>
 </body>
 </html>

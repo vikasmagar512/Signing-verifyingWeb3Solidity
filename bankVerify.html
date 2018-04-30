@@ -19,23 +19,8 @@
         }
         console.log(web3); // {eth: .., shh: ...} // it's her
         
-        web3.eth.defaultAccount = web3.eth.accounts[2];
-        
-        function watchBalance() {
-            var coinbase = web3.eth.coinbase;
-            console.log(coinbase)
-            var originalBalance = web3.eth.getBalance(coinbase).toNumber();
-            document.getElementById('coinbase').innerText = 'coinbase: ' + coinbase;
-            document.getElementById('original').innerText = ' original balance: ' + originalBalance + '    watching...';
+        web3.eth.defaultAccount = web3.eth.accounts[0];
 
-            web3.eth.filter('latest').watch(function() {
-                var currentBalance = web3.eth.getBalance(coinbase).toNumber();
-                document.getElementById("current").innerText = 'current: ' + currentBalance;
-                document.getElementById("diff").innerText = 'diff:    ' + (currentBalance - originalBalance);
-            });
-        }
-         
-              
         var CoursetroContract = web3.eth.contract([
 	{
 		"constant": false,
@@ -261,74 +246,31 @@
 	}
 ]);
 
-        var Coursetro = CoursetroContract.at('0x161b2efe4a840bb0821e2f09c54ec2adccdcf710');
+        var Coursetro = CoursetroContract.at('0x8ff39f03957a404591701267326678b03505ddb3');
         console.log(Coursetro); 
 				
 		//working Testrpc
-		var bankID = "2"
-		// var msg1 = web3.sha3("sagar") 
+		// var msg1 = web3.sha3("sagar")
 		// var sig = web3.eth.sign(web3.eth.accounts[0], msg1)
 		// var r1 = sig.substr(0,66)
 		// var s1 = "0x" + sig.substr(66,64)
-		// var v1 = 28 
+		// var v1 = 28
         // console.log('web3.eth.accounts ',web3.eth.accounts)
         // // console.log(v1,r1,s1)
-		// Coursetro.verify(msg1,v1,r1,s1, function(err,res){         
+		// Coursetro.verify(msg1,v1,r1,s1, function(err,res){
 		// 	console.log(err,res)
-		// }) 	
-		//working Testrpc
-		// var bankID = "2"
-		console.log('web3.eth.accounts[0] ',web3.eth.accounts[0])
-		var msg1 = web3.sha3("magar") 
-		var sig = web3.eth.sign(web3.eth.accounts[0], msg1)
-		var r1 = sig.substr(0,66)
-		var s1 = "0x" + sig.substr(66,64)
-		var v1 = 28 
-			console.log(v1,r1,s1)
-		Coursetro.verify(msg1,v1,r1,s1, function(err,res){         
-			console.log(err,res)
-		}) 	
-		
-		// var msg1 = "hello1"
-		// var sig ="0x96f34bdf036ffc4714b7839585863e134c30ba5ff3533484edc741193a2f9c701024babceab6c2c360aac27163aeabc1bdecdf90c5d5488e8fb12a55b708379701"
-		// var r1 = sig.substr(0,66)
-		// var s1 = "0x" + sig.substr(66,64)
-		// var v1 = 28 
-		// 	console.log(v1,r1,s1)
-		// Coursetro.verify(msg1,v1,r1,s1, function(err,res){         
-		// 	console.log(err,res)
-		// }) 	
+		// })
+
+        var bankID = "2" // Just for example
+        console.log('web3.eth.accounts[0] ',web3.eth.accounts[0])
+
 
 		var retrievedSig;
 		var signerAddress;
 		var s2,v2,r2;
         var name;
-        // setTimeout(function(){
-		// 	Coursetro.getCustInfo(bankID, function(err,res){         
-		// 		console.log(err,res)
-		// 		console.log(JSON.stringify(res));
-        //         signerAddress = res[0]
-        //         name = res[1]
-		// 		retrievedSig = res[2]
-		// 		r2 = retrievedSig.substr(0,66)
-		// 		s2 = "0x" + retrievedSig.substr(66,64)
-		// 		v2 = 28 
-        //         console.log(name,signerAddress)
-		// 	    console.log(v2,r2,s2)
-		// 	}) 	
-		// },2000)
-		
-        // setTimeout(function(){
-		// 	console.log(name,signerAddress)
-		// 	console.log(v2,r2,s2)
-		// 	Coursetro.verifyAddress(web3.sha3(name),signerAddress,v2,r2,s2, function(err,res){         
-		// 		console.log(err,res)
-		// 	}) 	
-		// },5000)
-		function getCustInfo(){
-			bankID = document.getElementById("bankID").value
-            console.log('bankID is ',bankID)
-			Coursetro.getCustInfo(bankID, function(err,res){         
+        /*setTimeout(function(){
+			Coursetro.getCustInfo(bankID, function(err,res){
 				console.log(err,res)
 				console.log(JSON.stringify(res));
                 signerAddress = res[0]
@@ -336,17 +278,58 @@
 				retrievedSig = res[2]
 				r2 = retrievedSig.substr(0,66)
 				s2 = "0x" + retrievedSig.substr(66,64)
-				v2 = 28 
+				v2 = 28
                 console.log(name,signerAddress)
 			    console.log(v2,r2,s2)
-			}) 	
+			})
+		},2000)
+
+        setTimeout(function(){
+			console.log(name,signerAddress)
+			console.log(v2,r2,s2)
+			Coursetro.verifyAddress(web3.sha3(name),signerAddress,v2,r2,s2, function(err,res){
+				console.log(err,res)
+			})
+		},5000)*/
+		function getCustInfo(){
+            $('#custInfo').hide()
+            $('#resultDiv').hide()
+            bankID = document.getElementById("bankID").value
+            console.log('bankID is ',bankID)
+			Coursetro.getCustInfo(bankID, function(err,res){         
+				console.log(err,res)
+                if(err){
+				    alert(err)
+                }else{
+                    console.log(JSON.stringify(res));
+                    $('#custInfo').show()
+                    signerAddress = res[0]
+                    document.getElementById("address").innerHTML = signerAddress
+                    name = res[1]
+                    document.getElementById("name").innerHTML = name
+                    retrievedSig = res[2]
+                    document.getElementById("sig").innerHTML = retrievedSig
+                    r2 = retrievedSig.substr(0,66)
+                    s2 = "0x" + retrievedSig.substr(66,64)
+                    v2 = 28
+                    console.log(name,signerAddress)
+                    console.log(v2,r2,s2)
+                }
+			})
         }
 		function verifySig(){
             console.log(name,signerAddress)
 			console.log(v2,r2,s2)
-			Coursetro.verifyAddress(web3.sha3(name),signerAddress,v2,r2,s2, function(err,res){         
+            $('#resultDiv').hide()
+
+            Coursetro.verifyAddress(web3.sha3(name),signerAddress,v2,r2,s2, function(err,res){
 				console.log(err,res)
-				document.getElementById("result").html=res
+                if(err){
+				    alert('error')
+                }else{
+                    $('#resultDiv').show()
+                    document.getElementById("result").innerHTML=res === true ? 'Verified ' : 'Not Verified'
+                }
 			})
         }
     </script>
@@ -354,20 +337,24 @@
 <body>
     <h1>Enter Customer bankID</h1>
 	<label for="bankID" class="col-lg-2 control-label"> bankID</label>
-	<input id="bankID" type="text">
-    <button type="button" onClick="getCustInfo();">watch balance</button>
+	<input id="bankID" type="text" value="2">
+    <button type="button" onClick="getCustInfo();">get Customer Info</button>
     
-	<div class="container">
+	<div class="container" id="custInfo" style="display: none">
 		<h1>Customer</h1>
-        <label for="name" class="col-lg-2 control-label">Customer Name</label>		
+        <label for="name" class="col-lg-2 control-label">Customer Name :</label>
 		<p id='name'></p>
-        <label for="name" class="col-lg-2 control-label">Customer Signature</label>		
+        <label for="name" class="col-lg-2 control-label">Customer Signature :</label>
+        <p id='address'></p>
+        <label for="address" class="col-lg-2 control-label">Customer address :</label>
 		<p id='sig'></p>
         <button id="button" onClick="verifySig();">Verify Signature</button>
     </div>
-	<h1>Result</h1>
-    <p id='result'></p>
-        
+    <div id="resultDiv" style="display: none;">
+        <h1>Result</h1>
+        <p id='result'></p>
+    </div>
+
     <h1>coinbase balance</h1>
     <button type="button" onClick="watchBalance();">watch balance</button>
     <div></div>
